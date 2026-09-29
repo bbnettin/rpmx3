@@ -14,7 +14,7 @@
 <!-- ============ BRANDING CONFIG (edit these) ============ -->
 
 <!-- 1) Page title (shown in browser tab) -->
-<title>RPM Diesel · Field Portal</title>
+<title>HighEnd Equipment · Field Portal</title>
 
 <!-- 2) Favicon (small icon in browser tab).
         Use a square PNG, ideally 192x192 or 512x512. -->
@@ -33,14 +33,14 @@
         - og:description and twitter:description = the description text
         - og:image and twitter:image = the preview image (1200x630 is ideal) -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="RPM Diesel · Field Portal">
-<meta property="og:description" content="RPM Diesel field portal for customer service photo & customer sign-off.">
-<meta property="og:image" content="https://rpmdiesel.com/wp-content/uploads/2025/03/RPM-Logo-2025-2048x481.png">
+<meta property="og:title" content="HighEnd Equipment · Field Portal">
+<meta property="og:description" content="Field service photo & customer sign-off portal for HighEnd Equipment.">
+<meta property="og:image" content="https://via.placeholder.com/1200x630/0b1b2f/ffffff?text=HighEnd+Equipment">
 <meta property="og:url" content="https://your-github-pages-url-here.com">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="RPM Diesel · Field Portal">
-<meta name="twitter:description" content="RPM Diesel field portal for customer service photo & customer sign-off.">
+<meta name="twitter:title" content="HighEnd Equipment · Field Portal">
+<meta name="twitter:description" content="Field service photo & customer sign-off portal for HighEnd Equipment.">
 <meta name="twitter:image" content="https://via.placeholder.com/1200x630/0b1b2f/ffffff?text=HighEnd+Equipment">
 
 <!-- 6) Theme color (colors the browser chrome on Android Chrome) -->
@@ -58,9 +58,9 @@
   .card{max-width:680px;width:100%;background:#fff;border-radius:24px;box-shadow:0 16px 40px -14px rgba(0,0,0,.18);padding:24px 24px 32px;}
 
   /* ============ HEADER LOGO ============ */
-  /* Replace the src below with your logo URL. */
-  .brand{display:flex;justify-content:center;margin-bottom:16px;}
-  .brand img{max-width:220px;max-height:80px;height:auto;width:auto;display:block;object-fit:contain;}
+  /* Replace the src in the HTML below with your logo URL. */
+  .brand{display:flex;justify-content:center;margin-bottom:18px;padding:6px 0;}
+  .brand img{max-width:320px;max-height:120px;height:auto;width:auto;display:block;object-fit:contain;}
 
   .sub{font-size:15px;color:#3d5170;margin-bottom:20px;border-left:4px solid #2f7ef5;padding-left:14px;line-height:1.45;font-weight:500;}
 
@@ -207,14 +207,34 @@
   .modal-close-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #05101d;}
 
   /* ============ FOOTER ============ */
-  .footer{margin-top:28px;padding-top:20px;border-top:1px solid #e2eaf5;display:flex;justify-content:space-between;align-items:flex-end;gap:14px;}
+  .footer{margin-top:28px;padding-top:22px;border-top:1px solid #e2eaf5;display:flex;justify-content:space-between;align-items:center;gap:16px;}
   .footer .footer-left{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1;}
   .footer .company-name{font-size:14px;font-weight:800;color:#0b1b2f;letter-spacing:.3px;}
   .footer .footer-links{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#5e6f8b;line-height:1.4;}
-  .footer a{color:#5e6f8b;text-decoration:none;font-weight:500;}
-  .footer a:hover{color:#1e6df2;text-decoration:underline;}
-  .footer .footer-phone{flex-shrink:0;font-size:15px;font-weight:700;color:#1e6df2;text-decoration:none;white-space:nowrap;}
-  .footer .footer-phone:hover{color:#1652b8;text-decoration:none;}
+  .footer .address-link{color:#5e6f8b;text-decoration:none;font-weight:500;}
+  .footer .address-link:hover{color:#1e6df2;text-decoration:underline;}
+
+  /* Phone number — prominent, professional */
+  .footer .footer-phone{
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 18px;
+    border-radius:14px;
+    background:#f4f9ff;
+    border:2px solid #dde8f5;
+    color:#1e6df2;
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:.3px;
+    text-decoration:none;
+    white-space:nowrap;
+    transition:.15s;
+  }
+  .footer .footer-phone:hover{background:#e8f1ff;border-color:#7ea9e8;color:#1652b8;}
+  .footer .footer-phone:active{transform:translateY(1px);}
+  .footer .footer-phone .icon{font-size:18px;}
 </style>
  
  <script src="https://cdn.counter.dev/script.js" data-id="4c590672-a3ad-4367-a78a-c531b24d02dd" data-utcoffset="-4"></script>
@@ -228,7 +248,7 @@
        ============================================================ -->
   <div class="brand">
     <!-- ⬇️ REPLACE THE src BELOW WITH YOUR LOGO URL ⬇️ -->
-    <img src="https://rpmdiesel.com/wp-content/uploads/2025/03/RPM-Logo-2025-2048x481.png" alt="RPM Diesel · Field Portal">
+    <img src="https://via.placeholder.com/440x120/ffffff/0b1b2f?text=HighEnd+Equipment" alt="HighEnd Equipment">
   </div>
 
   <!-- Connection error banner (only shows if GET fails) -->
@@ -396,7 +416,10 @@
         <a class="address-link" id="footerAddress" href="#" target="_blank" rel="noopener">123 Marina Blvd, Suite 400<br>Fort Lauderdale, FL 33301</a>
       </div>
     </div>
-    <a class="footer-phone" id="footerPhone" href="tel:+15551234567">📞 (555) 123-4567</a>
+    <a class="footer-phone" id="footerPhone" href="tel:+15551234567">
+      <span class="icon">📞</span>
+      <span>(555) 123-4567</span>
+    </a>
   </div>
 </div>
 
@@ -479,29 +502,11 @@ document.getElementById("custDate").value = todayStr;
    FOOTER LINKS
    ============================================================ */
 (function setupFooter() {
-  // Google Maps link for the address
   const addressText = "123 Marina Blvd, Suite 400, Fort Lauderdale, FL 33301";
   const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addressText);
   document.getElementById("footerAddress").href = mapsUrl;
   // Phone is already tel: in the HTML
 })();
-
-/* ============================================================
-   NEXT-ID PREDICTION (for instant vessel creation)
-   ============================================================ */
-// We compute the next available ID from the equipment list once
-// it loads. This lets us create vessels instantly without waiting
-// for a round-trip confirmation.
-let predictedNextId = null;
-
-function recomputePredictedNextId_() {
-  let max = 0;
-  equipmentList.forEach(e => {
-    const m = String(e.id || "").match(/^RPM-(\d+)$/);
-    if (m) max = Math.max(max, parseInt(m[1], 10));
-  });
-  predictedNextId = "RPM-" + String(max + 1).padStart(5, "0");
-}
 
 /* ============================================================
    STATUS MODAL
@@ -659,7 +664,6 @@ async function loadEquipment(retries) {
       }
       if (!data.ok) throw new Error(data.error || "load failed");
       equipmentList = data.equipment || [];
-      recomputePredictedNextId_();
       hideConnBanner();
       if (document.getElementById("resultsPhoto").classList.contains("show")) renderPickerResults("photo");
       if (document.getElementById("resultsSign").classList.contains("show"))  renderPickerResults("sign");
@@ -854,78 +858,79 @@ document.addEventListener("click", (e) => {
 });
 
 /* ============================================================
-   FAST VESSEL CREATION (fire-and-forget prediction)
+   FIND OR CREATE VESSEL (reliable, wait-for-confirmation)
    ------------------------------------------------------------
-   If no vessel is selected, we predict the next ID instantly
-   from the cached equipment list. We fire off the addEquipment
-   request in the background AND immediately return a "virtual"
-   equipment object so the caller can proceed with the upload
-   right away — no waiting for a round-trip.
-   ------------------------------------------------------------
-   If our prediction was wrong (rare — only when two techs
-   create a vessel at the exact same moment), the backend will
-   still have created a valid entry. Worst case: the photos land
-   in a folder with a slightly different ID, but the vessel is
-   still fully registered and findable.
+   If the user typed vessel details but didn't select from the
+   dropdown, this creates the vessel on the server, then polls
+   the registry until it appears (or times out). Returns the
+   confirmed equipment object, or null on failure.
    ============================================================ */
-function fastCreateVessel_(which) {
+async function findOrCreateVessel_(which) {
+  if (pickerState[which].selected) return pickerState[which].selected;
+
   const i = ids_(which);
   const name  = document.getElementById(i.name).value.trim();
   const model = document.getElementById(i.model).value.trim();
   if (!model) return null;
 
-  // If we don't yet know the next ID, fall back to null
-  // (caller will need to do the slow path)
-  if (!predictedNextId) return null;
-
-  // Check whether this exact vessel already exists in cache
   const nameLower  = name.toLowerCase();
   const modelLower = model.toLowerCase();
-  const existing = equipmentList.find(e =>
+
+  // Check local cache first
+  let found = equipmentList.find(e =>
     (e.name  || "").toLowerCase() === nameLower &&
     (e.model || "").toLowerCase() === modelLower
   );
-  if (existing) {
-    pickerState[which].selected = existing;
-    pushRecentId(existing.id);
-    return existing;
+  if (found) {
+    pickerState[which].selected = found;
+    pushRecentId(found.id);
+    return found;
   }
 
-  // Build a virtual entry using the predicted ID
-  const virtualEntry = {
-    id: predictedNextId,
-    name: name,
-    model: model,
-    label: name && model ? (name + " — " + model) : (name || model),
-    customer: "",
-    folder: "",
-    created: new Date().toISOString()
-  };
-
-  // Fire off the create in the background — we do NOT await this.
-  // The iframe upload mechanism runs independently; the create
-  // will complete on the server even as we start uploading photos.
-  submitViaIframe(APPS_SCRIPT_URL, {
-    action: "addEquipment",
-    name: name,
-    model: model,
-    customer: ""
-  }).catch(err => {
-    console.warn("Background vessel creation failed:", err);
-  });
-
-  // Bump the predicted ID so a second create in the same session
-  // doesn't collide.
-  const m = predictedNextId.match(/^RPM-(\d+)$/);
-  if (m) {
-    predictedNextId = "RPM-" + String(parseInt(m[1], 10) + 1).padStart(5, "0");
+  // Create on the server
+  try {
+    await submitViaIframe(APPS_SCRIPT_URL, {
+      action: "addEquipment",
+      name: name,
+      model: model,
+      customer: ""
+    });
+  } catch (err) {
+    console.error("addEquipment failed:", err);
+    return null;
   }
 
-  // Cache the virtual entry so subsequent lookups find it
-  equipmentList.push(virtualEntry);
-  pickerState[which].selected = virtualEntry;
-  pushRecentId(virtualEntry.id);
-  return virtualEntry;
+  // Poll for confirmation — up to ~15 seconds, checking every 1.5s
+  for (let attempt = 0; attempt < 10; attempt++) {
+    await new Promise(r => setTimeout(r, 1500));
+    try {
+      const url = APPS_SCRIPT_URL + "?action=list&_=" + Date.now();
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (!data.ok) continue;
+      equipmentList = data.equipment || [];
+
+      found = equipmentList.find(e =>
+        (e.name  || "").toLowerCase() === nameLower &&
+        (e.model || "").toLowerCase() === modelLower
+      );
+      if (!found) {
+        // Fallback: model-only match (in case name was cleared server-side)
+        found = equipmentList.find(e => (e.model || "").toLowerCase() === modelLower);
+      }
+      if (found) {
+        pickerState[which].selected = found;
+        pushRecentId(found.id);
+        return found;
+      }
+    } catch (pollErr) {
+      console.warn("Poll attempt " + (attempt+1) + " failed:", pollErr);
+    }
+  }
+
+  console.error("Vessel creation did not confirm within timeout");
+  return null;
 }
 
 /* ============================================================
@@ -1014,7 +1019,7 @@ document.getElementById("addConfirm").addEventListener("click", async () => {
       customer: customer
     });
 
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 1200));
     await loadEquipment();
 
     const wantedModel = model.toLowerCase();
@@ -1200,7 +1205,7 @@ filesInput.addEventListener("change", () => {
 });
 
 /* ============================================================
-   PHOTO SUBMIT (with instant vessel creation)
+   PHOTO SUBMIT (reliable vessel creation)
    ============================================================ */
 document.getElementById("submitPhotos").addEventListener("click", async () => {
   const btn = document.getElementById("submitPhotos");
@@ -1212,7 +1217,7 @@ document.getElementById("submitPhotos").addEventListener("click", async () => {
 
   const modelVal = document.getElementById("modelPhoto").value.trim();
   if (!modelVal) {
-    showError("Type the size / make ", "Please enter the size / make of the vessel.");
+    showError("Type the model / size", "Please enter the size and make of the vessel.");
     return;
   }
   if (!lead) {
@@ -1228,22 +1233,15 @@ document.getElementById("submitPhotos").addEventListener("click", async () => {
   btn.innerHTML = '⏳ Uploading…';
 
   try {
-    // Fast path: if no vessel selected, predict + create in background
     let chosen = pickerState.photo.selected;
     if (!chosen) {
-      chosen = fastCreateVessel_("photo");
-      // Fallback: if prediction wasn't possible, do the slow path
+      showLoading("Saving vessel…", "One moment.");
+      chosen = await findOrCreateVessel_("photo");
       if (!chosen) {
-        showLoading("Preparing vessel…", "One moment.");
-        await loadEquipment();
-        chosen = fastCreateVessel_("photo");
-        if (!chosen) {
-          throw new Error("Could not create or find the vessel.");
-        }
+        throw new Error("Could not create or find the vessel.");
       }
     }
 
-    // Build file data
     const fileData = await Promise.all(selectedPhotos.map(p => new Promise(res => {
       const r = new FileReader();
       r.onload = ev => res({
@@ -1330,7 +1328,7 @@ document.getElementById("clearSig").addEventListener("click", () => {
 });
 
 /* ============================================================
-   SIGN SUBMIT (with instant vessel creation)
+   SIGN SUBMIT (reliable vessel creation)
    ============================================================ */
 document.getElementById("submitSign").addEventListener("click", async () => {
   const btn = document.getElementById("submitSign");
@@ -1359,17 +1357,12 @@ document.getElementById("submitSign").addEventListener("click", async () => {
   btn.innerHTML = '⏳ Saving…';
 
   try {
-    // Fast path: if no vessel selected, predict + create in background
     let chosen = pickerState.sign.selected;
     if (!chosen) {
-      chosen = fastCreateVessel_("sign");
+      showLoading("Saving vessel…", "One moment.");
+      chosen = await findOrCreateVessel_("sign");
       if (!chosen) {
-        showLoading("Preparing vessel…", "One moment.");
-        await loadEquipment();
-        chosen = fastCreateVessel_("sign");
-        if (!chosen) {
-          throw new Error("Could not create or find the vessel.");
-        }
+        throw new Error("Could not create or find the vessel.");
       }
     }
 

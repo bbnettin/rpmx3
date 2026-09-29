@@ -9,7 +9,7 @@
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;}
   html{font-size:17px;}
   body{background:#eef2f8;min-height:100vh;padding:14px;display:flex;justify-content:center;align-items:flex-start;color:#0b1b2f;}
-  .card{max-width:680px;width:100%;background:#fff;border-radius:24px;box-shadow:0 16px 40px -14px rgba(0,0,0,.18);padding:24px 24px 32px;display:flex;flex-direction:column;min-height:calc(100vh - 28px);}
+  .card{max-width:680px;width:100%;background:#fff;border-radius:24px;box-shadow:0 16px 40px -14px rgba(0,0,0,.18);padding:24px 24px 32px;}
   h1{font-size:24px;font-weight:800;color:#0b1b2f;display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
   h1 span{background:#0b1b2f;color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.6px;}
   .sub{font-size:15px;color:#3d5170;margin-bottom:20px;border-left:4px solid #2f7ef5;padding-left:14px;line-height:1.45;font-weight:500;}
@@ -62,9 +62,22 @@
   .file-btn.has-files{border-color:#0f9d58;background:#f2fbf5;color:#0f9d58;}
   .file-btn.has-files .count{background:#0f9d58;color:#fff;}
 
-  .submit{width:100%;padding:24px;border:none;border-radius:20px;background:#0b1b2f;color:#fff;font-size:20px;font-weight:800;cursor:pointer;margin-top:8px;letter-spacing:.3px;box-shadow:0 4px 0 #05101d;transition:.1s;}
-  .submit:active{transform:translateY(3px);box-shadow:0 1px 0 #05101d;}
-  .submit:disabled{background:#cbd6e6;box-shadow:0 4px 0 #a4b3c6;cursor:not-allowed;}
+  /* Photo previews */
+  .photo-previews{display:grid;grid-template-columns:repeat(auto-fill, minmax(72px, 1fr));gap:8px;margin-top:14px;}
+  .photo-previews:empty{display:none;}
+  .photo-thumb{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;border:2px solid #dde8f5;background:#f7faff;}
+  .photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .photo-thumb .remove{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:rgba(229,57,53,.92);color:#fff;border:none;font-weight:800;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.25);}
+  .photo-thumb .remove:active{transform:scale(.92);}
+
+  /* Submit buttons — professional colors */
+  .submit{width:100%;padding:24px;border:none;border-radius:20px;color:#fff;font-size:20px;font-weight:800;cursor:pointer;margin-top:8px;letter-spacing:.3px;transition:.1s;}
+  .submit:active{transform:translateY(3px);}
+  .submit:disabled{background:#cbd6e6 !important;box-shadow:0 4px 0 #a4b3c6 !important;cursor:not-allowed;}
+  #submitPhotos{background:#1e6df2;box-shadow:0 4px 0 #1652b8;}
+  #submitPhotos:active{box-shadow:0 1px 0 #1652b8;}
+  #submitSign{background:#0f9d58;box-shadow:0 4px 0 #0a6c3c;}
+  #submitSign:active{box-shadow:0 1px 0 #0a6c3c;}
 
   .hint{font-size:14px;color:#5e6f8b;margin-top:10px;line-height:1.45;font-weight:500;}
 
@@ -87,9 +100,9 @@
   .coworkers-box .chip{background:#1e6df2;color:#fff;font-size:15px;font-weight:700;padding:9px 14px;border-radius:24px;display:flex;align-items:center;gap:8px;}
   .coworkers-box .chip button{background:rgba(255,255,255,.3);border:none;color:#fff;font-weight:800;cursor:pointer;font-size:18px;line-height:1;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;}
   .coworkers-box .add-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
-  .coworkers-box .add-row input{flex:1;min-width:140px;padding:16px;border:2px solid #c9d6e8;border-radius:14px;font-size:16px;outline:none;font-weight:600;}
+  .coworkers-box .add-row input{flex:1;min-width:140px;padding:14px 16px;border:2px solid #c9d6e8;border-radius:14px;font-size:16px;outline:none;font-weight:600;}
   .coworkers-box .add-row input:focus{border-color:#2f7ef5;}
-  .coworkers-box .add-row button{flex-shrink:0;padding:16px 22px;border:none;border-radius:14px;background:#1e6df2;color:#fff;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 3px 0 #1652b8;}
+  .coworkers-box .add-row button{flex-shrink:0;padding:14px 18px;border:none;border-radius:14px;background:#1e6df2;color:#fff;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 3px 0 #1652b8;}
   .coworkers-box .add-row button:active{transform:translateY(2px);box-shadow:0 1px 0 #1652b8;}
 
   .folder-preview{display:none !important;}
@@ -143,20 +156,14 @@
   .modal-close-btn{margin-top:26px;padding:20px 40px;border:none;border-radius:16px;background:#0b1b2f;color:#fff;font-weight:800;font-size:18px;cursor:pointer;box-shadow:0 4px 0 #05101d;width:100%;letter-spacing:.3px;}
   .modal-close-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #05101d;}
 
-  /* Footer */
-  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:20px;border-top:1px solid #e2eaf5;font-size:12px;color:#8f9fb2;font-weight:500;letter-spacing:.2px;}
-  .footer span{white-space:nowrap;}
-  .footer .footer-address{text-align:left;overflow:hidden;text-overflow:ellipsis;}
-  .footer .footer-phone{text-align:right;flex-shrink:0;margin-left:10px;}
-
-  /* Diagnostic modal */
-  .diag-row{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #f1f5fb;font-size:15px;}
-  .diag-row:last-child{border-bottom:none;}
-  .diag-key{font-weight:700;color:#3d5170;}
-  .diag-val{font-weight:600;color:#0b1b2f;text-align:right;max-width:60%;word-break:break-word;}
-  .diag-val.ok{color:#0f9d58;}
-  .diag-val.bad{color:#e53935;}
-  pre.raw{background:#0b1b2f;color:#a8e6a8;padding:16px;border-radius:12px;font-size:12px;line-height:1.4;overflow-x:auto;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow-y:auto;margin-top:12px;font-family:monospace;}
+  /* ============ FOOTER ============ */
+  .footer{margin-top:28px;padding-top:20px;border-top:1px solid #e2eaf5;display:flex;flex-direction:column;gap:8px;}
+  .footer .company-name{font-size:14px;font-weight:800;color:#0b1b2f;letter-spacing:.3px;}
+  .footer .footer-links{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#5e6f8b;line-height:1.4;}
+  .footer a{color:#1e6df2;text-decoration:none;font-weight:600;}
+  .footer a:hover{text-decoration:underline;}
+  .footer .address-link{color:#5e6f8b;font-weight:500;}
+  .footer .address-link:hover{color:#1e6df2;}
 </style>
  
  <script src="https://cdn.counter.dev/script.js" data-id="4c590672-a3ad-4367-a78a-c531b24d02dd" data-utcoffset="-4"></script>
@@ -170,7 +177,7 @@
   <div class="conn-banner" id="connBanner">
     <h3>⚠️ Can't reach the server</h3>
     <p id="connBannerText">The page couldn't load the equipment list. This usually means the Apps Script URL is wrong or the deployment isn't set to "Anyone".</p>
-    <button id="connBannerTest">🔍 Run Diagnostic Test</button>
+    <button id="connBannerTest">🔄 Reload Page</button>
   </div>
 
   <div class="mode-switch">
@@ -231,6 +238,8 @@
         <span class="count" id="fileCount">0</span>
       </label>
       <input type="file" id="files" accept="image/*" multiple>
+      <div class="photo-previews" id="photoPreviews"></div>
+      <div class="hint">Tap the box again any time to add more photos. They all upload together.</div>
     </div>
 
     <button class="submit" id="submitPhotos">⬆️ Upload Photos</button>
@@ -322,8 +331,11 @@
 
   <!-- Footer -->
   <div class="footer">
-    <span class="footer-address">123 Marina Blvd, Fort Lauderdale, FL 33301</span>
-    <span class="footer-phone">(555) 123-4567</span>
+    <div class="company-name">HighEnd Equipment Services</div>
+    <div class="footer-links">
+      <a class="address-link" id="footerAddress" href="#" target="_blank" rel="noopener">123 Marina Blvd, Suite 400<br>Fort Lauderdale, FL 33301</a>
+      <a id="footerPhone" href="tel:+15551234567">📞 (555) 123-4567</a>
+    </div>
   </div>
 </div>
 
@@ -401,6 +413,17 @@ const todayStr = (() => {
   return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
 })();
 document.getElementById("custDate").value = todayStr;
+
+/* ============================================================
+   FOOTER LINKS
+   ============================================================ */
+(function setupFooter() {
+  // Google Maps link for the address
+  const addressText = "123 Marina Blvd, Suite 400, Fort Lauderdale, FL 33301";
+  const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addressText);
+  document.getElementById("footerAddress").href = mapsUrl;
+  // Phone is already tel: in the HTML
+})();
 
 /* ============================================================
    STATUS MODAL
@@ -501,7 +524,6 @@ const btnP = document.getElementById("modePhotos");
 const btnS = document.getElementById("modeSign");
 const panP = document.getElementById("panelPhotos");
 const panS = document.getElementById("panelSign");
-const subtitle = document.getElementById("subtitle");
 btnP.addEventListener("click", () => {
   btnP.classList.add("active"); btnS.classList.remove("active");
   panP.classList.add("active"); panS.classList.remove("active")
@@ -532,7 +554,6 @@ document.getElementById("techLeadSign").addEventListener("input",  e => persistT
 let equipmentList = [];
 const RECENTS_KEY = "recentEquipmentIds";
 const MAX_RECENTS = 8;
-let lastLoadStatus = "not attempted";
 
 function getRecentIds() {
   try { return JSON.parse(localStorage.getItem(RECENTS_KEY) || "[]"); }
@@ -549,12 +570,9 @@ async function loadEquipment(retries) {
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
       const url = APPS_SCRIPT_URL + "?action=list&_=" + Date.now();
-      console.log("[loadEquipment] attempt " + (attempt+1) + " → " + url);
       const res = await fetch(url, { cache: "no-store" });
-      console.log("[loadEquipment] HTTP status:", res.status);
       if (!res.ok) throw new Error("HTTP " + res.status);
       const text = await res.text();
-      console.log("[loadEquipment] raw response (first 300 chars):", text.substring(0, 300));
       let data;
       try {
         data = JSON.parse(text);
@@ -563,25 +581,20 @@ async function loadEquipment(retries) {
       }
       if (!data.ok) throw new Error(data.error || "load failed");
       equipmentList = data.equipment || [];
-      lastLoadStatus = "OK — " + equipmentList.length + " items";
-      console.log("[loadEquipment] OK:", equipmentList.length, "items");
       hideConnBanner();
       if (document.getElementById("resultsPhoto").classList.contains("show")) renderPickerResults("photo");
       if (document.getElementById("resultsSign").classList.contains("show"))  renderPickerResults("sign");
       return;
     } catch (err) {
       console.warn("[loadEquipment] attempt " + (attempt+1) + " failed:", err);
-      lastLoadStatus = "Failed: " + (err.message || err);
       if (attempt < retries - 1) await new Promise(r => setTimeout(r, 900 * (attempt + 1)));
     }
   }
-  console.error("[loadEquipment] gave up after " + retries + " attempts");
-  showConnBanner(lastLoadStatus);
+  showConnBanner("Could not reach the server after multiple attempts.");
 }
 
 function showConnBanner(msg) {
-  document.getElementById("connBannerText").textContent =
-    "The page couldn't load the equipment list.\n\nReason: " + msg;
+  document.getElementById("connBannerText").textContent = msg;
   document.getElementById("connBanner").classList.add("show");
 }
 function hideConnBanner() {
@@ -760,6 +773,66 @@ document.addEventListener("click", (e) => {
     }
   });
 });
+
+/* ============================================================
+   SILENT VESSEL CREATION HELPER
+   Used when the user typed vessel details but didn't select from
+   the dropdown. Creates the vessel then returns the new entry.
+   ============================================================ */
+async function findOrCreateVessel_(which) {
+  if (pickerState[which].selected) return pickerState[which].selected;
+
+  const i = ids_(which);
+  const name  = document.getElementById(i.name).value.trim();
+  const model = document.getElementById(i.model).value.trim();
+
+  if (!model) return null;
+
+  // First, try to find a match in the current cache (exact name + model)
+  const nameLower  = name.toLowerCase();
+  const modelLower = model.toLowerCase();
+  let found = equipmentList.find(e =>
+    (e.name  || "").toLowerCase() === nameLower &&
+    (e.model || "").toLowerCase() === modelLower
+  );
+  if (found) {
+    pickerState[which].selected = found;
+    pushRecentId(found.id);
+    return found;
+  }
+
+  // Silently create it
+  try {
+    await submitViaIframe(APPS_SCRIPT_URL, {
+      action: "addEquipment",
+      name: name,
+      model: model,
+      customer: ""
+    });
+    // Wait for the sheet to settle
+    await new Promise(r => setTimeout(r, 1200));
+    await loadEquipment();
+
+    // Try to find it again
+    found = equipmentList.find(e =>
+      (e.name  || "").toLowerCase() === nameLower &&
+      (e.model || "").toLowerCase() === modelLower
+    );
+    if (!found) {
+      // Fallback: match on model alone
+      found = equipmentList.find(e => (e.model || "").toLowerCase() === modelLower);
+    }
+    if (found) {
+      pickerState[which].selected = found;
+      pushRecentId(found.id);
+      return found;
+    }
+    return null;
+  } catch (err) {
+    console.error("Silent vessel creation failed:", err);
+    return null;
+  }
+}
 
 /* ============================================================
    ADD NEW EQUIPMENT MODAL
@@ -950,7 +1023,7 @@ document.getElementById("coworkerInputPhoto").addEventListener("blur", () => flu
 document.getElementById("coworkerInputSign").addEventListener("blur",  () => flushCoworkerInput_("sign"));
 
 /* ============================================================
-   FOLDER PREVIEW
+   FOLDER PREVIEW (hidden from users, still computed)
    ============================================================ */
 function updateFolderPreviews() {
   ["photo","sign"].forEach(which => {
@@ -973,13 +1046,42 @@ document.querySelectorAll('input[name="ptype"]').forEach(r => {
 });
 
 /* ============================================================
-   PHOTO INPUT
+   PHOTO INPUT + PREVIEWS
    ============================================================ */
 const filesInput = document.getElementById("files");
 const fileBtn = document.getElementById("fileBtn");
 const fileCount = document.getElementById("fileCount");
-filesInput.addEventListener("change", () => {
-  const n = filesInput.files.length;
+const photoPreviews = document.getElementById("photoPreviews");
+
+// Store selected photos in a persistent array with object URLs
+let selectedPhotos = []; // { id, file, url }
+
+function renderPhotoPreviews() {
+  photoPreviews.innerHTML = selectedPhotos.map(p => `
+    <div class="photo-thumb" data-id="${p.id}">
+      <img src="${p.url}" alt="preview">
+      <button type="button" class="remove" data-id="${p.id}" aria-label="Remove photo">×</button>
+    </div>
+  `).join("");
+
+  photoPreviews.querySelectorAll(".remove").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      const idx = selectedPhotos.findIndex(p => p.id === id);
+      if (idx >= 0) {
+        URL.revokeObjectURL(selectedPhotos[idx].url);
+        selectedPhotos.splice(idx, 1);
+        updateFileCount();
+        renderPhotoPreviews();
+      }
+    });
+  });
+}
+
+function updateFileCount() {
+  const n = selectedPhotos.length;
   fileCount.textContent = n;
   if (n > 0) {
     fileBtn.classList.add("has-files");
@@ -988,63 +1090,99 @@ filesInput.addEventListener("change", () => {
     fileBtn.classList.remove("has-files");
     document.getElementById("fileLabel").textContent = "Tap here to choose photos";
   }
+}
+
+filesInput.addEventListener("change", () => {
+  const newFiles = Array.from(filesInput.files || []);
+  newFiles.forEach(f => {
+    selectedPhotos.push({
+      id: "p_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+      file: f,
+      url: URL.createObjectURL(f)
+    });
+  });
+  // Reset the input so selecting the same file again still fires "change"
+  filesInput.value = "";
+  updateFileCount();
+  renderPhotoPreviews();
 });
 
 /* ============================================================
-   PHOTO SUBMIT
+   PHOTO SUBMIT (with silent vessel creation)
    ============================================================ */
 document.getElementById("submitPhotos").addEventListener("click", async () => {
   const btn = document.getElementById("submitPhotos");
   flushCoworkerInput_("photo");
 
-  const chosen = pickerState.photo.selected;
   const ptype  = getPtype_();
-  const files  = filesInput.files;
   const lead   = document.getElementById("techLeadPhoto").value.trim();
   const extras = coworkers.photo.slice();
 
-  if (!chosen) {
-    const modelVal = document.getElementById("modelPhoto").value.trim();
-    if (!modelVal) {
-      showError("Type the model / size", "Search for the equipment, or tap Add as new if it's not in the list.");
-    } else {
-      showError("Pick the equipment from the list", "Tap a result from the dropdown, or tap Add as new if it doesn't exist.");
-    }
+  // Basic validation
+  const modelVal = document.getElementById("modelPhoto").value.trim();
+  if (!modelVal) {
+    showError("Type the model / size", "Please enter the size and make of the vessel.");
     return;
   }
-  if (!lead)              { showError("Enter your name", "Please type your full name."); return; }
-  if (files.length === 0) { showError("Add at least one photo", "Tap the Choose photos box first."); return; }
-
-  const fileData = await Promise.all(Array.from(files).map(f => new Promise(res => {
-    const r = new FileReader();
-    r.onload = ev => res({ name: f.name, mime: f.type, data: ev.target.result.split(",")[1] });
-    r.readAsDataURL(f);
-  })));
-
-  const payload = {
-    action: "uploadPhotos",
-    equipId: chosen.id,
-    ptype: ptype,
-    date: todayStr,
-    techLead: lead,
-    coworkers: extras,
-    files: fileData
-  };
+  if (!lead) {
+    showError("Enter your name", "Please type your full name.");
+    return;
+  }
+  if (selectedPhotos.length === 0) {
+    showError("Add at least one photo", "Tap the Choose photos box first.");
+    return;
+  }
 
   btn.disabled = true;
   btn.innerHTML = '⏳ Uploading…';
-  showLoading(
-    "Uploading " + files.length + " photo" + (files.length>1?"s":"") + "…",
-    "Please wait. Do not close this page."
-  );
+  showLoading("Preparing upload…", "Please wait. Do not close this page.");
 
   try {
+    // If no vessel is selected, silently create it first
+    let chosen = pickerState.photo.selected;
+    if (!chosen) {
+      showLoading("Saving vessel…", "One moment.");
+      chosen = await findOrCreateVessel_("photo");
+      if (!chosen) {
+        throw new Error("Could not create or find the vessel.");
+      }
+    }
+
+    // Build file data
+    const fileData = await Promise.all(selectedPhotos.map(p => new Promise(res => {
+      const r = new FileReader();
+      r.onload = ev => res({
+        name: p.file.name,
+        mime: p.file.type,
+        data: ev.target.result.split(",")[1]
+      });
+      r.readAsDataURL(p.file);
+    })));
+
+    const payload = {
+      action: "uploadPhotos",
+      equipId: chosen.id,
+      ptype: ptype,
+      date: todayStr,
+      techLead: lead,
+      coworkers: extras,
+      files: fileData
+    };
+
+    showLoading(
+      "Uploading " + selectedPhotos.length + " photo" + (selectedPhotos.length>1?"s":"") + "…",
+      "Please wait. Do not close this page."
+    );
+
     await submitViaIframe(APPS_SCRIPT_URL, payload);
-    showSuccess("All done! Thanks.", files.length + " photo" + (files.length>1?"s":"") + " uploaded and filed.");
-    filesInput.value = "";
-    fileCount.textContent = "0";
-    fileBtn.classList.remove("has-files");
-    document.getElementById("fileLabel").textContent = "Tap here to choose photos";
+
+    showSuccess("All done! Thanks.", selectedPhotos.length + " photo" + (selectedPhotos.length>1?"s":"") + " uploaded and filed.");
+
+    // Clear photos
+    selectedPhotos.forEach(p => URL.revokeObjectURL(p.url));
+    selectedPhotos = [];
+    updateFileCount();
+    renderPhotoPreviews();
   } catch (err) {
     console.error(err);
     showError("Upload failed", "Check your internet and try again. Nothing was lost.");
@@ -1098,26 +1236,18 @@ document.getElementById("clearSig").addEventListener("click", () => {
 });
 
 /* ============================================================
-   SIGN SUBMIT
+   SIGN SUBMIT (with silent vessel creation)
    ============================================================ */
 document.getElementById("submitSign").addEventListener("click", async () => {
   const btn = document.getElementById("submitSign");
   flushCoworkerInput_("sign");
 
-  const chosen   = pickerState.sign.selected;
   const custName = document.getElementById("custName").value.trim();
   const lead     = document.getElementById("techLeadSign").value.trim();
   const extras   = coworkers.sign.slice();
 
-  if (!chosen) {
-    const modelVal = document.getElementById("modelSign").value.trim();
-    if (!modelVal) {
-      showError("Type the model / size", "Search for the equipment, or tap Add as new if it's not in the list.");
-    } else {
-      showError("Pick the equipment from the list", "Tap a result from the dropdown, or tap Add as new if it doesn't exist.");
-    }
-    return;
-  }
+  const modelVal = document.getElementById("modelSign").value.trim();
+  if (!modelVal) { showError("Type the model / size", "Please enter the size and make of the vessel."); return; }
   if (!custName) { showError("Customer must print their name", "Please hand the device to the customer."); return; }
   if (!signed)   { showError("Customer must sign", "Please ask them to sign in the box."); return; }
   if (!lead)     { showError("Enter your name", "Please type your full name."); return; }
@@ -1131,28 +1261,41 @@ document.getElementById("submitSign").addEventListener("click", async () => {
     return;
   }
 
-  const payload = {
-    action: "uploadSignature",
-    equipId: chosen.id,
-    date: todayStr,
-    customerName: custName,
-    customerPhone: document.getElementById("custPhone").value.trim(),
-    customerEmail: document.getElementById("custEmail").value.trim(),
-    customerAddress: document.getElementById("custAddress").value.trim(),
-    customerNotes: document.getElementById("custNotes").value.trim(),
-    customerDate: document.getElementById("custDate").value,
-    techLead: lead,
-    coworkers: extras,
-    signature: sigData
-  };
-
   btn.disabled = true;
   btn.innerHTML = '⏳ Saving…';
-  showLoading("Saving signature…", "Please wait. Do not close this page.");
+  showLoading("Preparing save…", "Please wait. Do not close this page.");
 
   try {
+    // If no vessel is selected, silently create it first
+    let chosen = pickerState.sign.selected;
+    if (!chosen) {
+      showLoading("Saving vessel…", "One moment.");
+      chosen = await findOrCreateVessel_("sign");
+      if (!chosen) {
+        throw new Error("Could not create or find the vessel.");
+      }
+    }
+
+    const payload = {
+      action: "uploadSignature",
+      equipId: chosen.id,
+      date: todayStr,
+      customerName: custName,
+      customerPhone: document.getElementById("custPhone").value.trim(),
+      customerEmail: document.getElementById("custEmail").value.trim(),
+      customerAddress: document.getElementById("custAddress").value.trim(),
+      customerNotes: document.getElementById("custNotes").value.trim(),
+      customerDate: document.getElementById("custDate").value,
+      techLead: lead,
+      coworkers: extras,
+      signature: sigData
+    };
+
+    showLoading("Saving signature…", "Please wait. Do not close this page.");
     await submitViaIframe(APPS_SCRIPT_URL, payload);
+
     showSuccess("All done — thank you!", "Customer signature saved.");
+
     document.getElementById("custName").value = "";
     document.getElementById("custPhone").value = "";
     document.getElementById("custEmail").value = "";

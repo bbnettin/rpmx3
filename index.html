@@ -58,9 +58,25 @@
   .card{max-width:680px;width:100%;background:#fff;border-radius:24px;box-shadow:0 16px 40px -14px rgba(0,0,0,.18);padding:24px 24px 32px;}
 
   /* ============ HEADER LOGO ============ */
-  /* Replace the src in the HTML below with your logo URL. */
-  .brand{display:flex;justify-content:center;margin-bottom:18px;padding:6px 0;}
-  .brand img{max-width:320px;max-height:120px;height:auto;width:auto;display:block;object-fit:contain;}
+  /* Adjust --logo-max-width and --logo-max-height to resize your logo.
+     The logo will never exceed these dimensions, and it stays centered.
+     Original aspect ratio is preserved. */
+  .brand{
+    --logo-max-width: 380px;   /* ← change this number to resize */
+    --logo-max-height: 140px;  /* ← and this one too */
+    display:flex;
+    justify-content:center;
+    margin-bottom:18px;
+    padding:6px 0;
+  }
+  .brand img{
+    max-width:var(--logo-max-width);
+    max-height:var(--logo-max-height);
+    height:auto;
+    width:auto;
+    display:block;
+    object-fit:contain;
+  }
 
   .sub{font-size:15px;color:#3d5170;margin-bottom:20px;border-left:4px solid #2f7ef5;padding-left:14px;line-height:1.45;font-weight:500;}
 
@@ -207,34 +223,19 @@
   .modal-close-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #05101d;}
 
   /* ============ FOOTER ============ */
-  .footer{margin-top:28px;padding-top:22px;border-top:1px solid #e2eaf5;display:flex;justify-content:space-between;align-items:center;gap:16px;}
-  .footer .footer-left{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1;}
-  .footer .company-name{font-size:14px;font-weight:800;color:#0b1b2f;letter-spacing:.3px;}
-  .footer .footer-links{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:#5e6f8b;line-height:1.4;}
-  .footer .address-link{color:#5e6f8b;text-decoration:none;font-weight:500;}
+  .footer{margin-top:32px;padding-top:20px;border-top:1px solid #e2eaf5;}
+  .footer .company-name{font-size:13px;font-weight:800;color:#0b1b2f;letter-spacing:.4px;margin-bottom:8px;text-transform:uppercase;}
+  .footer .footer-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+  .footer .address-link{font-size:13px;font-weight:500;color:#5e6f8b;line-height:1.5;text-decoration:none;flex:1;min-width:0;}
   .footer .address-link:hover{color:#1e6df2;text-decoration:underline;}
+  .footer .footer-phone{font-size:13px;font-weight:600;color:#5e6f8b;text-decoration:none;white-space:nowrap;}
+  .footer .footer-phone:hover{color:#1e6df2;text-decoration:underline;}
 
-  /* Phone number — prominent, professional */
-  .footer .footer-phone{
-    flex-shrink:0;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:12px 18px;
-    border-radius:14px;
-    background:#f4f9ff;
-    border:2px solid #dde8f5;
-    color:#1e6df2;
-    font-size:17px;
-    font-weight:800;
-    letter-spacing:.3px;
-    text-decoration:none;
-    white-space:nowrap;
-    transition:.15s;
+  /* On very narrow screens, stack the address and phone */
+  @media (max-width: 420px){
+    .footer .footer-row{flex-direction:column;gap:6px;}
+    .footer .footer-phone{white-space:normal;}
   }
-  .footer .footer-phone:hover{background:#e8f1ff;border-color:#7ea9e8;color:#1652b8;}
-  .footer .footer-phone:active{transform:translateY(1px);}
-  .footer .footer-phone .icon{font-size:18px;}
 </style>
  
  <script src="https://cdn.counter.dev/script.js" data-id="4c590672-a3ad-4367-a78a-c531b24d02dd" data-utcoffset="-4"></script>
@@ -248,7 +249,7 @@
        ============================================================ -->
   <div class="brand">
     <!-- ⬇️ REPLACE THE src BELOW WITH YOUR LOGO URL ⬇️ -->
-    <img src="https://via.placeholder.com/440x120/ffffff/0b1b2f?text=HighEnd+Equipment" alt="HighEnd Equipment">
+    <img src="https://rpmdiesel.com/wp-content/uploads/2025/03/RPM-Logo-2025-2048x481.png" alt="RPM Diesel">
   </div>
 
   <!-- Connection error banner (only shows if GET fails) -->
@@ -410,16 +411,14 @@
   <!-- ============ FOOTER ============ -->
   <!-- ⬇️ EDIT COMPANY NAME, ADDRESS, AND PHONE BELOW ⬇️ -->
   <div class="footer">
-    <div class="footer-left">
-      <div class="company-name">HighEnd Equipment Services</div>
-      <div class="footer-links">
-        <a class="address-link" id="footerAddress" href="#" target="_blank" rel="noopener">123 Marina Blvd, Suite 400<br>Fort Lauderdale, FL 33301</a>
-      </div>
+    <div class="company-name">HighEnd Equipment Services</div>
+    <div class="footer-row">
+      <a class="address-link" id="footerAddress" href="#" target="_blank" rel="noopener">
+        123 Marina Blvd, Suite 400<br>
+        Fort Lauderdale, FL 33301
+      </a>
+      <a class="footer-phone" id="footerPhone" href="tel:+15551234567">(555) 123-4567</a>
     </div>
-    <a class="footer-phone" id="footerPhone" href="tel:+15551234567">
-      <span class="icon">📞</span>
-      <span>(555) 123-4567</span>
-    </a>
   </div>
 </div>
 

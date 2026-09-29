@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>HighEnd Equipment · Field Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;}
+  html{font-size:17px;}
+  body{background:#eef2f8;min-height:100vh;padding:14px;display:flex;justify-content:center;align-items:flex-start;color:#0b1b2f;}
+  .card{max-width:680px;width:100%;background:#fff;border-radius:24px;box-shadow:0 16px 40px -14px rgba(0,0,0,.18);padding:24px 24px 32px;display:flex;flex-direction:column;min-height:calc(100vh - 28px);}
+  h1{font-size:24px;font-weight:800;color:#0b1b2f;display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+  h1 span{background:#0b1b2f;color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.6px;}
+  .sub{font-size:15px;color:#3d5170;margin-bottom:20px;border-left:4px solid #2f7ef5;padding-left:14px;line-height:1.45;font-weight:500;}
+
+  /* Connection error banner */
+  .conn-banner{display:none;background:#ffe9e9;border:2px solid #e53935;border-radius:16px;padding:18px;margin-bottom:18px;color:#8a1f1f;font-weight:600;}
+  .conn-banner.show{display:block;}
+  .conn-banner h3{font-size:18px;margin-bottom:6px;color:#8a1f1f;}
+  .conn-banner p{font-size:14px;line-height:1.5;margin-bottom:12px;}
+  .conn-banner button{background:#e53935;color:#fff;border:none;border-radius:12px;padding:14px 20px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 3px 0 #a32320;width:100%;}
+  .conn-banner button:active{transform:translateY(2px);box-shadow:0 1px 0 #a32320;}
+
+  .step{background:#f7faff;border:2px solid #dde8f5;border-radius:20px;padding:20px 20px 22px;margin-bottom:18px;position:relative;}
+  .step-label{font-size:15px;font-weight:800;color:#1e6df2;letter-spacing:.3px;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .step-label .num{background:#1e6df2;color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0;}
+
+  .picker{position:relative;}
+  .picker-fields{display:grid;grid-template-columns:1fr;gap:14px;}
+  .picker-field label{font-size:15px;font-weight:700;color:#3d5170;display:block;margin-bottom:6px;}
+  .picker-field .opt-tag{font-size:13px;font-weight:500;color:#8f9fb2;}
+  .picker-field .req-tag{font-size:13px;font-weight:800;color:#e53935;letter-spacing:.3px;}
+  .picker-field input{width:100%;padding:16px;border:2px solid #c9d6e8;border-radius:14px;font-size:17px;background:#fff;outline:none;font-weight:600;color:#0b1b2f;}
+  .picker-field input:focus{border-color:#2f7ef5;box-shadow:0 0 0 4px rgba(47,126,245,.15);}
+  .picker-results{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:18px;box-shadow:0 16px 40px -10px rgba(0,0,0,.28);max-height:340px;overflow-y:auto;z-index:50;display:none;border:2px solid #e2eaf5;}
+  .picker-results.show{display:block;}
+  .picker-results .group-label{font-size:12px;font-weight:800;color:#5e6f8b;letter-spacing:.6px;text-transform:uppercase;padding:12px 16px 6px;}
+  .picker-results .result{padding:16px;border-bottom:1px solid #f1f5fb;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .picker-results .result:last-child{border-bottom:none;}
+  .picker-results .result:hover,.picker-results .result:active{background:#f0f6ff;}
+  .picker-results .result .info{min-width:0;flex:1;}
+  .picker-results .result .lbl{font-weight:700;color:#0b1b2f;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .picker-results .result .meta{font-size:14px;color:#5e6f8b;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;}
+  .picker-results .result .id{font-size:13px;font-weight:800;background:#eef2f8;color:#3d5170;padding:5px 10px;border-radius:20px;flex-shrink:0;}
+  .picker-results .empty{padding:22px 16px;font-size:16px;color:#5e6f8b;text-align:center;line-height:1.5;font-weight:500;}
+  .add-inline{display:flex;align-items:center;gap:12px;padding:16px;background:#fff7e6;border-top:2px solid #f0d89b;cursor:pointer;}
+  .add-inline:active{background:#ffefc7;}
+  .add-inline .plus{background:#f0b849;color:#fff;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;font-size:22px;}
+  .add-inline .txt{font-size:15px;color:#6d4f0a;font-weight:700;line-height:1.3;}
+  .add-inline .txt small{display:block;font-weight:500;color:#a58653;margin-top:2px;font-size:13px;}
+
+  .toggle{display:flex;gap:14px;margin-top:10px;}
+  .toggle label{flex:1;text-align:center;padding:22px 12px;border-radius:18px;border:3px solid #c9d6e8;background:#fff;cursor:pointer;font-size:20px;font-weight:800;color:#5e6f8b;transition:.12s;margin:0;}
+  .toggle input{display:none;}
+  #beforeLbl:has(input:checked){background:#1e6df2;border-color:#1e6df2;color:#fff;}
+  #afterLbl:has(input:checked){background:#0f9d58;border-color:#0f9d58;color:#fff;}
+
+  .file-btn{display:flex;justify-content:space-between;align-items:center;padding:22px;border:3px dashed #7ea9e8;border-radius:18px;background:#f4f9ff;cursor:pointer;font-weight:800;color:#1e6df2;font-size:18px;}
+  .file-btn input{display:none;}
+  .file-btn .count{background:#1e6df2;padding:6px 14px;border-radius:30px;font-size:15px;color:#fff;font-weight:800;}
+  .file-btn.has-files{border-color:#0f9d58;background:#f2fbf5;color:#0f9d58;}
+  .file-btn.has-files .count{background:#0f9d58;color:#fff;}
+
+  .submit{width:100%;padding:24px;border:none;border-radius:20px;background:#0b1b2f;color:#fff;font-size:20px;font-weight:800;cursor:pointer;margin-top:8px;letter-spacing:.3px;box-shadow:0 4px 0 #05101d;transition:.1s;}
+  .submit:active{transform:translateY(3px);box-shadow:0 1px 0 #05101d;}
+  .submit:disabled{background:#cbd6e6;box-shadow:0 4px 0 #a4b3c6;cursor:not-allowed;}
+
+  .hint{font-size:14px;color:#5e6f8b;margin-top:10px;line-height:1.45;font-weight:500;}
+
+  canvas{width:100%;height:180px;background:#fff;border:2px solid #c9d6e8;border-radius:18px;touch-action:none;cursor:crosshair;display:block;}
+  .sig-actions{margin-top:14px;}
+  .clear-btn{background:#ff6b35;color:#fff;border:none;border-radius:16px;padding:20px 24px;font-size:18px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:12px;justify-content:center;width:100%;box-shadow:0 4px 0 #c94a17;letter-spacing:.5px;transition:.1s;}
+  .clear-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #c94a17;}
+  .clear-btn .icon{font-size:24px;}
+
+  .sign-fields{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:10px;}
+  .sign-fields label{font-size:15px;font-weight:700;color:#3d5170;display:block;margin-bottom:6px;}
+  .sign-fields input, .sign-fields textarea{width:100%;padding:18px;border:2px solid #c9d6e8;border-radius:16px;font-size:18px;background:#fff;outline:none;font-weight:600;font-family:'Inter',sans-serif;resize:vertical;min-height:56px;}
+  .sign-fields input:focus, .sign-fields textarea:focus{border-color:#2f7ef5;box-shadow:0 0 0 4px rgba(47,126,245,.15);}
+
+  .text-input{width:100%;padding:18px;border:2px solid #c9d6e8;border-radius:16px;font-size:18px;background:#fff;outline:none;font-weight:600;color:#0b1b2f;}
+  .text-input:focus{border-color:#2f7ef5;box-shadow:0 0 0 4px rgba(47,126,245,.15);}
+
+  .coworkers-box{background:#fff;border:2px solid #c9d6e8;border-radius:16px;padding:16px;margin-top:10px;}
+  .coworkers-box .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+  .coworkers-box .chip{background:#1e6df2;color:#fff;font-size:15px;font-weight:700;padding:9px 14px;border-radius:24px;display:flex;align-items:center;gap:8px;}
+  .coworkers-box .chip button{background:rgba(255,255,255,.3);border:none;color:#fff;font-weight:800;cursor:pointer;font-size:18px;line-height:1;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;}
+  .coworkers-box .add-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+  .coworkers-box .add-row input{flex:1;min-width:140px;padding:16px;border:2px solid #c9d6e8;border-radius:14px;font-size:16px;outline:none;font-weight:600;}
+  .coworkers-box .add-row input:focus{border-color:#2f7ef5;}
+  .coworkers-box .add-row button{flex-shrink:0;padding:16px 22px;border:none;border-radius:14px;background:#1e6df2;color:#fff;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 3px 0 #1652b8;}
+  .coworkers-box .add-row button:active{transform:translateY(2px);box-shadow:0 1px 0 #1652b8;}
+
+  .folder-preview{display:none !important;}
+
+  .mode-switch{display:flex;background:#e2ebf6;border-radius:16px;padding:6px;margin-bottom:20px;}
+  .mode-switch button{flex:1;background:none;border:none;padding:16px 10px;border-radius:12px;font-weight:800;font-size:17px;color:#3d5170;cursor:pointer;transition:.15s;}
+  .mode-switch button.active{background:#fff;color:#0b1b2f;box-shadow:0 3px 10px rgba(0,0,0,.1);}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .chosen-summary{background:#f4fbf6;border:2px solid #8fd0a8;border-radius:14px;padding:14px 16px;margin-top:14px;font-size:16px;color:#0b5a30;display:none;font-weight:600;line-height:1.4;}
+  .chosen-summary.show{display:block;}
+  .chosen-summary strong{color:#0b1b2f;}
+
+  .modal-backdrop{position:fixed;inset:0;background:rgba(11,27,47,.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);overflow-y:auto;}
+  .modal-backdrop.show{display:flex;animation:fadeIn .15s ease-out;}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+  .modal{background:#fff;border-radius:24px;max-width:540px;width:100%;padding:28px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.35);margin:auto;}
+  .modal h3{font-size:22px;font-weight:800;color:#0b1b2f;margin-bottom:8px;}
+  .modal .modal-sub{font-size:15px;color:#5e6f8b;line-height:1.5;margin-bottom:20px;font-weight:500;}
+  .modal .actions{display:flex;gap:12px;margin-top:22px;flex-direction:column;}
+  .modal .actions button{padding:20px;border-radius:16px;border:none;font-weight:800;font-size:17px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.15);}
+  .modal .actions button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15);}
+  .modal .actions .cancel{background:#eef2f8;color:#3d5170;box-shadow:0 4px 0 #c9d6e8;}
+  .modal .actions .cancel:active{box-shadow:0 1px 0 #c9d6e8;}
+  .modal .actions .confirm{background:#0f9d58;color:#fff;box-shadow:0 4px 0 #0a6c3c;}
+  .modal .actions .confirm:active{box-shadow:0 1px 0 #0a6c3c;}
+
+  .modal-field{margin-bottom:18px;}
+  .modal-field label{font-size:15px;font-weight:700;color:#3d5170;display:block;margin-bottom:6px;}
+  .modal-field .opt-tag{font-size:13px;font-weight:500;color:#8f9fb2;}
+  .modal-field .req-tag{font-size:13px;font-weight:800;color:#e53935;letter-spacing:.3px;}
+  .modal-field input{width:100%;padding:16px;border:2px solid #c9d6e8;border-radius:14px;font-size:17px;background:#fff;outline:none;font-weight:600;color:#0b1b2f;}
+  .modal-field input:focus{border-color:#2f7ef5;box-shadow:0 0 0 4px rgba(47,126,245,.15);}
+  .modal-field .hint{font-size:13px;color:#8f9fb2;margin-top:4px;font-weight:500;}
+
+  .sim-label{font-size:13px;font-weight:800;color:#b06b00;text-transform:uppercase;letter-spacing:.5px;margin-top:20px;margin-bottom:10px;}
+  .sim-item{padding:14px;background:#fff8e6;border:2px solid #f0d89b;border-radius:12px;margin-bottom:8px;cursor:pointer;transition:.12s;}
+  .sim-item:hover,.sim-item:active{background:#ffefc7;}
+  .sim-lbl{font-weight:700;color:#0b1b2f;font-size:15px;}
+  .sim-meta{font-size:13px;color:#8a6516;margin-top:3px;font-weight:600;}
+
+  .status-modal{background:#fff;border-radius:28px;padding:48px 32px;max-width:440px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:popIn .25s cubic-bezier(.2,.8,.4,1.2);margin:auto;}
+  @keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+  .big-spinner{width:96px;height:96px;border:10px solid #e2eaf5;border-top-color:#1e6df2;border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 28px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .big-check{width:120px;height:120px;background:#0f9d58;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 28px;color:#fff;font-size:72px;font-weight:800;animation:popIn .35s cubic-bezier(.2,.8,.4,1.5);box-shadow:0 8px 24px rgba(15,157,88,.35);}
+  .big-error{width:120px;height:120px;background:#e53935;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 28px;color:#fff;font-size:72px;font-weight:800;animation:popIn .35s cubic-bezier(.2,.8,.4,1.5);box-shadow:0 8px 24px rgba(229,57,53,.35);}
+  .status-modal h2{font-size:26px;font-weight:800;color:#0b1b2f;margin-bottom:14px;line-height:1.25;}
+  .status-modal p{font-size:18px;color:#3d5170;line-height:1.5;font-weight:500;}
+  .modal-close-btn{margin-top:26px;padding:20px 40px;border:none;border-radius:16px;background:#0b1b2f;color:#fff;font-weight:800;font-size:18px;cursor:pointer;box-shadow:0 4px 0 #05101d;width:100%;letter-spacing:.3px;}
+  .modal-close-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #05101d;}
+
+  /* Footer */
+  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:20px;border-top:1px solid #e2eaf5;font-size:12px;color:#8f9fb2;font-weight:500;letter-spacing:.2px;}
+  .footer span{white-space:nowrap;}
+  .footer .footer-address{text-align:left;overflow:hidden;text-overflow:ellipsis;}
+  .footer .footer-phone{text-align:right;flex-shrink:0;margin-left:10px;}
+
+  /* Diagnostic modal */
+  .diag-row{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #f1f5fb;font-size:15px;}
+  .diag-row:last-child{border-bottom:none;}
+  .diag-key{font-weight:700;color:#3d5170;}
+  .diag-val{font-weight:600;color:#0b1b2f;text-align:right;max-width:60%;word-break:break-word;}
+  .diag-val.ok{color:#0f9d58;}
+  .diag-val.bad{color:#e53935;}
+  pre.raw{background:#0b1b2f;color:#a8e6a8;padding:16px;border-radius:12px;font-size:12px;line-height:1.4;overflow-x:auto;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow-y:auto;margin-top:12px;font-family:monospace;}
+</style>
+ 
+ <script src="https://cdn.counter.dev/script.js" data-id="4c590672-a3ad-4367-a78a-c531b24d02dd" data-utcoffset="-4"></script>
+ 
+</head>
+<body>
+<div class="card">
+  <h1>⚙️ HighEnd Equipment <span>FIELD PORTAL</span></h1>
+
+  <!-- Connection error banner (only shows if GET fails) -->
+  <div class="conn-banner" id="connBanner">
+    <h3>⚠️ Can't reach the server</h3>
+    <p id="connBannerText">The page couldn't load the equipment list. This usually means the Apps Script URL is wrong or the deployment isn't set to "Anyone".</p>
+    <button id="connBannerTest">🔍 Run Diagnostic Test</button>
+  </div>
+
+  <div class="mode-switch">
+    <button id="modePhotos" class="active">📸 Photos</button>
+    <button id="modeSign">✍️ Customer Sign-off</button>
+  </div>
+
+  <!-- ============ PHOTOS PANEL ============ -->
+  <div id="panelPhotos" class="panel active">
+    <div class="step">
+      <div class="step-label"><span class="num">1</span> Which vessel did you service?</div>
+      <div class="picker" id="pickerPhoto">
+        <div class="picker-fields">
+          <div class="picker-field">
+            <label>Vessel Name <span class="opt-tag">(optional)</span></label>
+            <input type="text" id="namePhoto" placeholder="e.g. Sea Breeze" autocomplete="off" autocapitalize="off" spellcheck="false">
+          </div>
+          <div class="picker-field">
+            <label>Size / Make <span class="req-tag">* REQUIRED</span></label>
+            <input type="text" id="modelPhoto" placeholder="e.g. 130ft Westport" autocomplete="off" autocapitalize="off" spellcheck="false">
+          </div>
+        </div>
+        <div class="picker-results" id="resultsPhoto"></div>
+      </div>
+      <div class="chosen-summary" id="chosenPhoto"></div>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="num">2</span> Are these BEFORE or AFTER?</div>
+      <div class="toggle">
+        <label id="beforeLbl"><input type="radio" name="ptype" value="BEFORE" checked>🔧 BEFORE</label>
+        <label id="afterLbl"><input type="radio" name="ptype" value="AFTER">✅ AFTER</label>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="num">3</span> Who is on this job?</div>
+      <div>
+        <label style="font-size:15px;font-weight:700;color:#3d5170;display:block;margin-bottom:6px;">Your name (required)</label>
+        <input type="text" id="techLeadPhoto" class="text-input" placeholder="Your full name" autocomplete="off">
+      </div>
+      <div class="coworkers-box">
+        <div style="font-size:15px;font-weight:700;color:#3d5170;">Other techs with you (optional)</div>
+        <div class="chips" id="coworkerChipsPhoto"></div>
+        <div class="add-row">
+          <input type="text" id="coworkerInputPhoto" placeholder="e.g. Dave, Danny, Tony" autocomplete="off">
+          <button type="button" id="addCoworkerPhoto">+ Add</button>
+        </div>
+        <div class="hint">Type names separated by commas.</div>
+      </div>
+      <div class="folder-preview" id="folderPreviewPhoto"></div>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="num">4</span> Add photos</div>
+      <label class="file-btn" id="fileBtn" for="files">
+        📁 <span id="fileLabel">Tap here to choose photos</span>
+        <span class="count" id="fileCount">0</span>
+      </label>
+      <input type="file" id="files" accept="image/*" multiple>
+    </div>
+
+    <button class="submit" id="submitPhotos">⬆️ Upload Photos</button>
+  </div>
+
+  <!-- ============ SIGN PANEL ============ -->
+  <div id="panelSign" class="panel">
+    <div class="step">
+      <div class="step-label"><span class="num">1</span> Which vessel did you service?</div>
+      <div class="picker" id="pickerSign">
+        <div class="picker-fields">
+          <div class="picker-field">
+            <label>Vessel Name <span class="opt-tag">(optional)</span></label>
+            <input type="text" id="nameSign" placeholder="e.g. Sea Breeze" autocomplete="off" autocapitalize="off" spellcheck="false">
+          </div>
+          <div class="picker-field">
+            <label>Size / Make <span class="req-tag">* REQUIRED</span></label>
+            <input type="text" id="modelSign" placeholder="e.g. 130ft Westport" autocomplete="off" autocapitalize="off" spellcheck="false">
+          </div>
+        </div>
+        <div class="picker-results" id="resultsSign"></div>
+      </div>
+      <div class="chosen-summary" id="chosenSign"></div>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="num">2</span> Customer details</div>
+      <div class="sign-fields">
+        <div>
+          <label>Customer full name</label>
+          <input type="text" id="custName" placeholder="Printed name" autocomplete="off">
+        </div>
+        <div>
+          <label>Phone number</label>
+          <input type="tel" id="custPhone" placeholder="e.g. (555) 123-4567" autocomplete="off">
+        </div>
+        <div>
+          <label>Email address</label>
+          <input type="email" id="custEmail" placeholder="e.g. john@example.com" autocomplete="off">
+        </div>
+        <div>
+          <label>Address</label>
+          <input type="text" id="custAddress" placeholder="Street, City, State, ZIP" autocomplete="off">
+        </div>
+        <div>
+          <label>Additional notes</label>
+          <textarea id="custNotes" placeholder="Any extra details..." rows="3"></textarea>
+        </div>
+        <div>
+          <label>Date</label>
+          <input type="text" id="custDate" readonly>
+        </div>
+      </div>
+      <div class="hint">Hand the device to the customer. They type their name and sign below.</div>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="num">3</span> Customer signature</div>
+      <canvas id="sig"></canvas>
+      <div class="sig-actions">
+        <button type="button" class="clear-btn" id="clearSig">
+          <span class="icon">🗑️</span>
+          <span>CLEAR SIGNATURE</span>
+        </button>
+      </div>
+      <div class="hint" style="text-align:center;">If you make a mistake, tap CLEAR SIGNATURE and start again.</div>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="num">4</span> Who is on this job?</div>
+      <div>
+        <label style="font-size:15px;font-weight:700;color:#3d5170;display:block;margin-bottom:6px;">Your name (required)</label>
+        <input type="text" id="techLeadSign" class="text-input" placeholder="Your full name" autocomplete="off">
+      </div>
+      <div class="coworkers-box">
+        <div style="font-size:15px;font-weight:700;color:#3d5170;">Other techs with you (optional)</div>
+        <div class="chips" id="coworkerChipsSign"></div>
+        <div class="add-row">
+          <input type="text" id="coworkerInputSign" placeholder="e.g. Dave, Danny, Tony" autocomplete="off">
+          <button type="button" id="addCoworkerSign">+ Add</button>
+        </div>
+        <div class="hint">Type names separated by commas.</div>
+      </div>
+      <div class="folder-preview" id="folderPreviewSign"></div>
+    </div>
+
+    <button class="submit" id="submitSign">✅ Save Customer Sign-off</button>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="footer-address">123 Marina Blvd, Fort Lauderdale, FL 33301</span>
+    <span class="footer-phone">(555) 123-4567</span>
+  </div>
+</div>
+
+<!-- ============ ADD NEW EQUIPMENT MODAL ============ -->
+<div class="modal-backdrop" id="addModal">
+  <div class="modal">
+    <h3>Add New Vessel</h3>
+    <p class="modal-sub">Fill this in once. After this, everyone can find it by searching.</p>
+
+    <div class="modal-field">
+      <label>Vessel Name <span class="opt-tag">(optional)</span></label>
+      <input type="text" id="addName" placeholder="e.g. Sea Breeze" autocomplete="off">
+    </div>
+
+    <div class="modal-field">
+      <label>Size / Make <span class="req-tag">* REQUIRED</span></label>
+      <input type="text" id="addModel" placeholder="e.g. 130ft Westport" autocomplete="off">
+      <div class="hint">The size and make of the vessel.</div>
+    </div>
+
+    <div class="modal-field">
+      <label>Customer / Owner <span class="opt-tag">(optional)</span></label>
+      <input type="text" id="addCustomer" placeholder="e.g. John Smith" autocomplete="off">
+    </div>
+
+    <div id="addSimilarList"></div>
+
+    <div class="actions">
+      <button class="cancel" id="addCancel">Cancel</button>
+      <button class="confirm" id="addConfirm">✓ Create Vessel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ STATUS MODAL ============ -->
+<div class="modal-backdrop" id="statusModal">
+  <div class="status-modal">
+    <div id="statusIconWrap">
+      <div class="big-spinner" id="statusSpinner"></div>
+      <div class="big-check" id="statusCheck" style="display:none;">✓</div>
+      <div class="big-error" id="statusError" style="display:none;">!</div>
+    </div>
+    <h2 id="statusTitle">Working…</h2>
+    <p id="statusBody">Please wait.</p>
+    <button id="statusCloseBtn" class="modal-close-btn" style="display:none;">OK</button>
+  </div>
+</div>
+
+<!-- Hidden iframe + form -->
+<iframe name="upload_target" id="uploadTarget" style="display:none;" title="upload target"></iframe>
+<form id="uploadForm" target="upload_target" method="POST" enctype="text/plain" action="" style="display:none;">
+  <input type="hidden" name="data" id="uploadData">
+</form>
+
+<script>
+/* ============================================================
+   ⚠️ CONFIG — REPLACE WITH YOUR DEPLOYED APPS SCRIPT URL
+   The URL must end in /exec  (NOT /dev)
+   ============================================================ */
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4pxU3D9FSsfQj3u8Q2Z1B3CKzAy3ZiBPSXZ25-dwHaaEA7I7xZDx6APa_49b-lWbUnA/exec";
+
+/* ---------- Startup sanity check on the URL ---------- */
+(function checkUrlFormat() {
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf("PASTE_YOUR") === 0) {
+    alert("⚠️ SETUP ERROR\n\nThe APPS_SCRIPT_URL has not been set in index.html.\n\nOpen the file in a text editor and replace PASTE_YOUR_WEB_APP_URL_HERE with your Apps Script Web App URL.");
+    return;
+  }
+  if (APPS_SCRIPT_URL.indexOf("/exec") === -1) {
+    alert("⚠️ URL WARNING\n\nYour APPS_SCRIPT_URL does not end in /exec.\n\nMake sure you copied the URL from 'Deploy → Manage deployments' (the /exec one), NOT the /dev one from 'Test deployments'.\n\nCurrent: " + APPS_SCRIPT_URL);
+  }
+})();
+
+const todayStr = (() => {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+})();
+document.getElementById("custDate").value = todayStr;
+
+/* ============================================================
+   STATUS MODAL
+   ============================================================ */
+const statusModal    = document.getElementById("statusModal");
+const statusTitle    = document.getElementById("statusTitle");
+const statusBody     = document.getElementById("statusBody");
+const statusSpinner  = document.getElementById("statusSpinner");
+const statusCheck    = document.getElementById("statusCheck");
+const statusError    = document.getElementById("statusError");
+const statusCloseBtn = document.getElementById("statusCloseBtn");
+let successTimer = null;
+
+function showLoading(title, body) {
+  if (successTimer) { clearTimeout(successTimer); successTimer = null; }
+  statusSpinner.style.display = "block";
+  statusCheck.style.display = "none";
+  statusError.style.display = "none";
+  statusCloseBtn.style.display = "none";
+  statusTitle.textContent = title || "Working…";
+  statusBody.textContent  = body  || "Please wait.";
+  statusModal.classList.add("show");
+}
+
+function showSuccess(title, body, autoDismissMs) {
+  statusSpinner.style.display = "none";
+  statusCheck.style.display = "flex";
+  statusError.style.display = "none";
+  statusCloseBtn.style.display = "none";
+  statusTitle.textContent = title || "All done!";
+  statusBody.textContent  = body  || "Thanks.";
+  statusModal.classList.add("show");
+  const delay = (typeof autoDismissMs === "number") ? autoDismissMs : 2800;
+  successTimer = setTimeout(() => {
+    statusModal.classList.remove("show");
+    successTimer = null;
+  }, delay);
+}
+
+function showError(title, body) {
+  if (successTimer) { clearTimeout(successTimer); successTimer = null; }
+  statusSpinner.style.display = "none";
+  statusCheck.style.display = "none";
+  statusError.style.display = "flex";
+  statusCloseBtn.style.display = "block";
+  statusTitle.textContent = title || "Something went wrong";
+  statusBody.textContent  = body  || "Please try again.";
+  statusModal.classList.add("show");
+}
+
+function hideStatus() {
+  if (successTimer) { clearTimeout(successTimer); successTimer = null; }
+  statusModal.classList.remove("show");
+}
+
+statusCloseBtn.addEventListener("click", hideStatus);
+statusModal.addEventListener("click", (e) => {
+  if (e.target === statusModal && statusCloseBtn.style.display !== "none") {
+    hideStatus();
+  }
+});
+
+/* ============================================================
+   IFRAME UPLOAD
+   ============================================================ */
+function submitViaIframe(url, payload) {
+  return new Promise((resolve, reject) => {
+    const iframe = document.getElementById("uploadTarget");
+    const form   = document.getElementById("uploadForm");
+    const input  = document.getElementById("uploadData");
+
+    let done = false;
+    const timeout = setTimeout(() => {
+      if (done) return;
+      done = true;
+      iframe.onload = null;
+      reject(new Error("Upload timed out"));
+    }, 180000);
+
+    iframe.onload = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timeout);
+      iframe.onload = null;
+      setTimeout(resolve, 600);
+    };
+
+    form.action = url;
+    input.value = JSON.stringify(payload);
+    form.submit();
+  });
+}
+
+/* ============================================================
+   MODE SWITCH
+   ============================================================ */
+const btnP = document.getElementById("modePhotos");
+const btnS = document.getElementById("modeSign");
+const panP = document.getElementById("panelPhotos");
+const panS = document.getElementById("panelSign");
+const subtitle = document.getElementById("subtitle");
+btnP.addEventListener("click", () => {
+  btnP.classList.add("active"); btnS.classList.remove("active");
+  panP.classList.add("active"); panS.classList.remove("active")
+});
+btnS.addEventListener("click", () => {
+  btnS.classList.add("active"); btnP.classList.remove("active");
+  panS.classList.add("active"); panP.classList.remove("active")
+});
+
+/* ============================================================
+   REMEMBER TECH NAME
+   ============================================================ */
+const savedTech = localStorage.getItem("techName") || "";
+document.getElementById("techLeadPhoto").value = savedTech;
+document.getElementById("techLeadSign").value  = savedTech;
+function persistTech(val) {
+  localStorage.setItem("techName", val);
+  document.getElementById("techLeadPhoto").value = val;
+  document.getElementById("techLeadSign").value  = val;
+  updateFolderPreviews();
+}
+document.getElementById("techLeadPhoto").addEventListener("input", e => persistTech(e.target.value));
+document.getElementById("techLeadSign").addEventListener("input",  e => persistTech(e.target.value));
+
+/* ============================================================
+   EQUIPMENT CACHE + RECENTS
+   ============================================================ */
+let equipmentList = [];
+const RECENTS_KEY = "recentEquipmentIds";
+const MAX_RECENTS = 8;
+let lastLoadStatus = "not attempted";
+
+function getRecentIds() {
+  try { return JSON.parse(localStorage.getItem(RECENTS_KEY) || "[]"); }
+  catch { return []; }
+}
+function pushRecentId(id) {
+  let arr = getRecentIds().filter(x => x !== id);
+  arr.unshift(id);
+  localStorage.setItem(RECENTS_KEY, JSON.stringify(arr.slice(0, MAX_RECENTS)));
+}
+
+async function loadEquipment(retries) {
+  retries = (typeof retries === "number") ? retries : 3;
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const url = APPS_SCRIPT_URL + "?action=list&_=" + Date.now();
+      console.log("[loadEquipment] attempt " + (attempt+1) + " → " + url);
+      const res = await fetch(url, { cache: "no-store" });
+      console.log("[loadEquipment] HTTP status:", res.status);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const text = await res.text();
+      console.log("[loadEquipment] raw response (first 300 chars):", text.substring(0, 300));
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseErr) {
+        throw new Error("Response is not JSON. Got: " + text.substring(0, 200));
+      }
+      if (!data.ok) throw new Error(data.error || "load failed");
+      equipmentList = data.equipment || [];
+      lastLoadStatus = "OK — " + equipmentList.length + " items";
+      console.log("[loadEquipment] OK:", equipmentList.length, "items");
+      hideConnBanner();
+      if (document.getElementById("resultsPhoto").classList.contains("show")) renderPickerResults("photo");
+      if (document.getElementById("resultsSign").classList.contains("show"))  renderPickerResults("sign");
+      return;
+    } catch (err) {
+      console.warn("[loadEquipment] attempt " + (attempt+1) + " failed:", err);
+      lastLoadStatus = "Failed: " + (err.message || err);
+      if (attempt < retries - 1) await new Promise(r => setTimeout(r, 900 * (attempt + 1)));
+    }
+  }
+  console.error("[loadEquipment] gave up after " + retries + " attempts");
+  showConnBanner(lastLoadStatus);
+}
+
+function showConnBanner(msg) {
+  document.getElementById("connBannerText").textContent =
+    "The page couldn't load the equipment list.\n\nReason: " + msg;
+  document.getElementById("connBanner").classList.add("show");
+}
+function hideConnBanner() {
+  document.getElementById("connBanner").classList.remove("show");
+}
+
+document.getElementById("connBannerTest").addEventListener("click", function() {
+  window.location.reload();
+});
+
+loadEquipment();
+
+/* ============================================================
+   PICKER
+   ============================================================ */
+const pickerState = {
+  photo: { selected: null },
+  sign:  { selected: null }
+};
+
+function ids_(which) {
+  return {
+    name:    which === "photo" ? "namePhoto" : "nameSign",
+    model:   which === "photo" ? "modelPhoto" : "modelSign",
+    picker:  which === "photo" ? "pickerPhoto" : "pickerSign",
+    results: which === "photo" ? "resultsPhoto" : "resultsSign",
+    summary: which === "photo" ? "chosenPhoto" : "chosenSign"
+  };
+}
+
+function displayLabel_(e) {
+  if (!e) return "";
+  if (e.name && e.model) return e.name + " — " + e.model;
+  return e.name || e.model || e.label || "";
+}
+
+function setupPicker_(which) {
+  const i = ids_(which);
+  const nameEl    = document.getElementById(i.name);
+  const modelEl   = document.getElementById(i.model);
+  const resultsEl = document.getElementById(i.results);
+
+  function showDropdown() {
+    renderPickerResults(which);
+    resultsEl.classList.add("show");
+  }
+
+  nameEl.addEventListener("focus", showDropdown);
+  modelEl.addEventListener("focus", showDropdown);
+  nameEl.addEventListener("input", () => {
+    if (pickerState[which].selected) clearChosen_(which);
+    showDropdown();
+  });
+  modelEl.addEventListener("input", () => {
+    if (pickerState[which].selected) clearChosen_(which);
+    showDropdown();
+  });
+}
+
+function renderPickerResults(which) {
+  const i = ids_(which);
+  const nameEl    = document.getElementById(i.name);
+  const modelEl   = document.getElementById(i.model);
+  const resultsEl = document.getElementById(i.results);
+
+  const n = nameEl.value.trim();
+  const m = modelEl.value.trim();
+  const query = (n + " " + m).trim().toLowerCase();
+
+  const matches = query
+    ? equipmentList.filter(e => {
+        const hay = ((e.name || "") + " " + (e.model || "") + " " + e.id + " " + (e.customer || "")).toLowerCase();
+        return query.split(/\s+/).every(part => hay.includes(part));
+      })
+    : equipmentList;
+
+  const recentIds = !query ? getRecentIds() : [];
+  const recentItems = recentIds.map(id => equipmentList.find(e => e.id === id)).filter(Boolean);
+
+  let html = "";
+
+  if (equipmentList.length === 0 && !query) {
+    html += `<div class="empty">No vessel loaded yet.<br><small>Type a name and tap "Add as new" below.</small></div>`;
+  } else if (!query && recentItems.length > 0) {
+    html += `<div class="group-label">⭐ My Recent</div>`;
+    recentItems.slice(0, 5).forEach(e => { html += resultRowHTML_(e); });
+    if (equipmentList.length > recentItems.length) {
+      html += `<div class="group-label">All Equipment (type to search)</div>`;
+      equipmentList.slice().sort((a,b) => (a.label || "").localeCompare(b.label || "")).slice(0, 5).forEach(e => {
+        html += resultRowHTML_(e);
+      });
+    }
+  } else if (matches.length > 0) {
+    const shown = matches.slice(0, 40);
+    html += `<div class="group-label">${shown.length}${matches.length > shown.length ? " of " + matches.length : ""} match${matches.length===1?"":"es"}</div>`;
+    shown.forEach(e => { html += resultRowHTML_(e); });
+  } else if (query) {
+    html += `<div class="empty">No vessel matches "<strong>${escapeHTML_(query)}</strong>".<br><small>Tap below to add it.</small></div>`;
+  } else {
+    html += `<div class="empty">Start typing to search.<br><small>Or tap below to add new vessel.</small></div>`;
+  }
+
+  html += `
+    <div class="add-inline" data-action="add">
+      <div class="plus">+</div>
+      <div class="txt">
+        Add as new vessel
+        <small>Only if it doesn't already exist above.</small>
+      </div>
+    </div>`;
+
+  resultsEl.innerHTML = html;
+
+  resultsEl.querySelectorAll(".result").forEach(el => {
+    el.addEventListener("click", () => selectEquipment_(which, el.dataset.id));
+  });
+  const addBtn = resultsEl.querySelector('[data-action="add"]');
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
+      resultsEl.classList.remove("show");
+      openAddModal_(which);
+    });
+  }
+}
+
+function resultRowHTML_(e) {
+  const display = escapeHTML_(displayLabel_(e));
+  const meta = escapeHTML_(e.id) + (e.customer ? " · " + escapeHTML_(e.customer) : "");
+  return `<div class="result" data-id="${e.id}">
+    <div class="info">
+      <div class="lbl">${display}</div>
+      <div class="meta">${meta}</div>
+    </div>
+    <div class="id">${e.id}</div>
+  </div>`;
+}
+
+function selectEquipment_(which, id) {
+  const e = equipmentList.find(x => x.id === id);
+  if (!e) return;
+  pickerState[which].selected = e;
+  pushRecentId(e.id);
+
+  const i = ids_(which);
+  document.getElementById(i.name).value  = e.name  || "";
+  document.getElementById(i.model).value = e.model || e.label || "";
+
+  const summaryEl = document.getElementById(i.summary);
+  summaryEl.classList.add("show");
+  const parts = [];
+  if (e.name)  parts.push(`<strong>${escapeHTML_(e.name)}</strong>`);
+  if (e.model) parts.push(`<strong>${escapeHTML_(e.model)}</strong>`);
+  const labelDisplay = parts.length ? parts.join(" — ") : escapeHTML_(e.label || "");
+  const custLine = e.customer ? ` &nbsp;·&nbsp; ${escapeHTML_(e.customer)}` : "";
+  summaryEl.innerHTML = `✓ ${labelDisplay} &nbsp;·&nbsp; ${e.id}${custLine}`;
+
+  document.getElementById(i.results).classList.remove("show");
+}
+
+function clearChosen_(which) {
+  pickerState[which].selected = null;
+  const i = ids_(which);
+  document.getElementById(i.summary).classList.remove("show");
+}
+
+setupPicker_("photo");
+setupPicker_("sign");
+
+document.addEventListener("click", (e) => {
+  ["photo","sign"].forEach(which => {
+    const i = ids_(which);
+    const pickerEl  = document.getElementById(i.picker);
+    const resultsEl = document.getElementById(i.results);
+    if (!pickerEl.contains(e.target) && !resultsEl.contains(e.target)) {
+      resultsEl.classList.remove("show");
+    }
+  });
+});
+
+/* ============================================================
+   ADD NEW EQUIPMENT MODAL
+   ============================================================ */
+let pendingWhich = "photo";
+
+function openAddModal_(which) {
+  pendingWhich = which || "photo";
+  const i = ids_(which);
+
+  document.getElementById("addName").value     = document.getElementById(i.name).value.trim();
+  document.getElementById("addModel").value    = document.getElementById(i.model).value.trim();
+  document.getElementById("addCustomer").value = "";
+
+  updateAddModalSuggestions();
+  document.getElementById("addModal").classList.add("show");
+
+  setTimeout(() => {
+    const nameVal = document.getElementById("addName").value.trim();
+    if (!nameVal) document.getElementById("addName").focus();
+    else document.getElementById("addModel").focus();
+  }, 120);
+}
+
+function updateAddModalSuggestions() {
+  const n = document.getElementById("addName").value.trim().toLowerCase();
+  const m = document.getElementById("addModel").value.trim().toLowerCase();
+  const listEl = document.getElementById("addSimilarList");
+  const query = (n + " " + m).trim();
+
+  if (!query || query.length < 2) { listEl.innerHTML = ""; return; }
+  const words = query.split(/\s+/).filter(w => w.length >= 3);
+  if (words.length === 0) { listEl.innerHTML = ""; return; }
+
+  const similar = equipmentList.filter(e => {
+    const hay = ((e.name || "") + " " + (e.model || "")).toLowerCase();
+    return words.some(w => hay.includes(w));
+  });
+
+  if (similar.length === 0) { listEl.innerHTML = ""; return; }
+
+  listEl.innerHTML = `
+    <div class="sim-label">⚠️ Similar items already exist:</div>
+    ${similar.slice(0, 5).map(e => `
+      <div class="sim-item" data-id="${e.id}">
+        <div class="sim-lbl">${escapeHTML_(displayLabel_(e))}</div>
+        <div class="sim-meta">${escapeHTML_(e.id)}${e.customer ? " · " + escapeHTML_(e.customer) : ""}</div>
+      </div>
+    `).join("")}
+    <div style="font-size:13px;color:#8a6516;margin-top:6px;font-weight:600;">Tap one to use it instead, or tap Create Vessel below to make a new one.</div>`;
+
+  listEl.querySelectorAll(".sim-item").forEach(el => {
+    el.addEventListener("click", () => {
+      document.getElementById("addModal").classList.remove("show");
+      selectEquipment_(pendingWhich, el.dataset.id);
+    });
+  });
+}
+
+document.getElementById("addName").addEventListener("input", updateAddModalSuggestions);
+document.getElementById("addModel").addEventListener("input", updateAddModalSuggestions);
+
+document.getElementById("addCancel").addEventListener("click", () => {
+  document.getElementById("addModal").classList.remove("show");
+});
+
+document.getElementById("addConfirm").addEventListener("click", async () => {
+  const name     = document.getElementById("addName").value.trim();
+  const model    = document.getElementById("addModel").value.trim();
+  const customer = document.getElementById("addCustomer").value.trim();
+
+  if (!model) {
+    showError("Size/make is required", "Please type at least the size and make of the vessel.");
+    return;
+  }
+
+  document.getElementById("addModal").classList.remove("show");
+  showLoading("Creating new vessel…", "This takes a few seconds. Please wait.");
+
+  try {
+    await submitViaIframe(APPS_SCRIPT_URL, {
+      action: "addEquipment",
+      name: name,
+      model: model,
+      customer: customer
+    });
+
+    await new Promise(r => setTimeout(r, 1200));
+    await loadEquipment();
+
+    const wantedModel = model.toLowerCase();
+    const wantedName  = name.toLowerCase();
+    let found = equipmentList.find(e =>
+      (e.model || "").toLowerCase() === wantedModel &&
+      (e.name  || "").toLowerCase() === wantedName
+    );
+    if (!found) found = equipmentList.find(e => (e.model || "").toLowerCase() === wantedModel);
+
+    if (found) {
+      selectEquipment_(pendingWhich, found.id);
+      showSuccess("Vessel created!", "Everyone can now search for it.");
+    } else {
+      showSuccess(
+        "Vessel saved",
+        "It may take a few seconds to appear. If you don't see it, refresh the page.",
+        3500
+      );
+    }
+  } catch (err) {
+    console.error("Create vessel failed:", err);
+    showError("Could not create vessel", "Please check your connection and try again.");
+  }
+});
+
+/* ============================================================
+   COWORKERS
+   ============================================================ */
+const coworkers = { photo: [], sign: [] };
+
+function slugifyName_(name) {
+  return String(name || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .substring(0, 40);
+}
+
+function buildFolderTag_(which) {
+  const lead = document.getElementById(which === "photo" ? "techLeadPhoto" : "techLeadSign").value.trim();
+  const extras = coworkers[which];
+  const names = [lead].concat(extras).filter(n => n && n.trim());
+  if (names.length === 0) return "";
+  return names.map(slugifyName_).filter(Boolean).join("-and-");
+}
+
+function renderCoworkers_(which) {
+  const chipsEl = document.getElementById(which === "photo" ? "coworkerChipsPhoto" : "coworkerChipsSign");
+  chipsEl.innerHTML = coworkers[which].map((name, i) => `
+    <div class="chip">${escapeHTML_(name)}<button type="button" data-index="${i}" data-which="${which}" aria-label="Remove">×</button></div>
+  `).join("");
+  chipsEl.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const w = btn.dataset.which;
+      const idx = parseInt(btn.dataset.index, 10);
+      coworkers[w].splice(idx, 1);
+      renderCoworkers_(w);
+      updateFolderPreviews();
+    });
+  });
+}
+
+function parseNameList_(str) {
+  return String(str || "")
+    .split(/[,;]+/)
+    .map(s => s.replace(/\band\b/gi, " ").trim())
+    .map(s => s.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+}
+
+function addCoworkersFromString_(which, str) {
+  const names = parseNameList_(str);
+  let added = false;
+  names.forEach(n => {
+    const exists = coworkers[which].some(c => c.toLowerCase() === n.toLowerCase());
+    if (!exists) { coworkers[which].push(n); added = true; }
+  });
+  if (added) { renderCoworkers_(which); updateFolderPreviews(); }
+}
+
+function flushCoworkerInput_(which) {
+  const inputEl = document.getElementById(which === "photo" ? "coworkerInputPhoto" : "coworkerInputSign");
+  const val = inputEl.value.trim();
+  if (!val) return;
+  addCoworkersFromString_(which, val);
+  inputEl.value = "";
+}
+
+document.getElementById("addCoworkerPhoto").addEventListener("click", () => flushCoworkerInput_("photo"));
+document.getElementById("addCoworkerSign").addEventListener("click",  () => flushCoworkerInput_("sign"));
+document.getElementById("coworkerInputPhoto").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); flushCoworkerInput_("photo"); }
+});
+document.getElementById("coworkerInputSign").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); flushCoworkerInput_("sign"); }
+});
+document.getElementById("coworkerInputPhoto").addEventListener("blur", () => flushCoworkerInput_("photo"));
+document.getElementById("coworkerInputSign").addEventListener("blur",  () => flushCoworkerInput_("sign"));
+
+/* ============================================================
+   FOLDER PREVIEW
+   ============================================================ */
+function updateFolderPreviews() {
+  ["photo","sign"].forEach(which => {
+    const el = document.getElementById(which === "photo" ? "folderPreviewPhoto" : "folderPreviewSign");
+    const tag = buildFolderTag_(which);
+    if (!tag) { el.classList.remove("show"); return; }
+    const folderName = which === "photo"
+      ? `${todayStr}_${getPtype_()}-${tag}`
+      : `${todayStr}_SIGNATURE-${tag}`;
+    el.classList.add("show");
+    el.innerHTML = `📁 Will save into: <code>${escapeHTML_(folderName)}</code>`;
+  });
+}
+
+function getPtype_() {
+  return document.querySelector('input[name="ptype"]:checked').value;
+}
+document.querySelectorAll('input[name="ptype"]').forEach(r => {
+  r.addEventListener("change", updateFolderPreviews);
+});
+
+/* ============================================================
+   PHOTO INPUT
+   ============================================================ */
+const filesInput = document.getElementById("files");
+const fileBtn = document.getElementById("fileBtn");
+const fileCount = document.getElementById("fileCount");
+filesInput.addEventListener("change", () => {
+  const n = filesInput.files.length;
+  fileCount.textContent = n;
+  if (n > 0) {
+    fileBtn.classList.add("has-files");
+    document.getElementById("fileLabel").textContent = n + " photo" + (n>1?"s":"") + " ready";
+  } else {
+    fileBtn.classList.remove("has-files");
+    document.getElementById("fileLabel").textContent = "Tap here to choose photos";
+  }
+});
+
+/* ============================================================
+   PHOTO SUBMIT
+   ============================================================ */
+document.getElementById("submitPhotos").addEventListener("click", async () => {
+  const btn = document.getElementById("submitPhotos");
+  flushCoworkerInput_("photo");
+
+  const chosen = pickerState.photo.selected;
+  const ptype  = getPtype_();
+  const files  = filesInput.files;
+  const lead   = document.getElementById("techLeadPhoto").value.trim();
+  const extras = coworkers.photo.slice();
+
+  if (!chosen) {
+    const modelVal = document.getElementById("modelPhoto").value.trim();
+    if (!modelVal) {
+      showError("Type the model / size", "Search for the equipment, or tap Add as new if it's not in the list.");
+    } else {
+      showError("Pick the equipment from the list", "Tap a result from the dropdown, or tap Add as new if it doesn't exist.");
+    }
+    return;
+  }
+  if (!lead)              { showError("Enter your name", "Please type your full name."); return; }
+  if (files.length === 0) { showError("Add at least one photo", "Tap the Choose photos box first."); return; }
+
+  const fileData = await Promise.all(Array.from(files).map(f => new Promise(res => {
+    const r = new FileReader();
+    r.onload = ev => res({ name: f.name, mime: f.type, data: ev.target.result.split(",")[1] });
+    r.readAsDataURL(f);
+  })));
+
+  const payload = {
+    action: "uploadPhotos",
+    equipId: chosen.id,
+    ptype: ptype,
+    date: todayStr,
+    techLead: lead,
+    coworkers: extras,
+    files: fileData
+  };
+
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Uploading…';
+  showLoading(
+    "Uploading " + files.length + " photo" + (files.length>1?"s":"") + "…",
+    "Please wait. Do not close this page."
+  );
+
+  try {
+    await submitViaIframe(APPS_SCRIPT_URL, payload);
+    showSuccess("All done! Thanks.", files.length + " photo" + (files.length>1?"s":"") + " uploaded and filed.");
+    filesInput.value = "";
+    fileCount.textContent = "0";
+    fileBtn.classList.remove("has-files");
+    document.getElementById("fileLabel").textContent = "Tap here to choose photos";
+  } catch (err) {
+    console.error(err);
+    showError("Upload failed", "Check your internet and try again. Nothing was lost.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "⬆️ Upload Photos";
+  }
+});
+
+/* ============================================================
+   SIGNATURE PAD
+   ============================================================ */
+const canvas = document.getElementById("sig");
+const ctx = canvas.getContext("2d");
+let signed = false;
+
+function fitCanvas(){
+  const r = canvas.getBoundingClientRect();
+  canvas.width = Math.max(r.width, 300);
+  canvas.height = 180;
+  ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.strokeStyle = "#0b1b2f";
+  ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+window.addEventListener("resize", fitCanvas);
+window.addEventListener("load", fitCanvas);
+setTimeout(fitCanvas, 60);
+
+let drawing = false, lx = 0, ly = 0;
+function pos(e){
+  const r = canvas.getBoundingClientRect();
+  const sx = canvas.width / r.width, sy = canvas.height / r.height;
+  const p = e.touches ? e.touches[0] : e;
+  return { x: (p.clientX - r.left) * sx, y: (p.clientY - r.top) * sy };
+}
+function start(e){ e.preventDefault(); drawing = true; signed = true; const p = pos(e); lx = p.x; ly = p.y; }
+function move(e){ e.preventDefault(); if (!drawing) return; const p = pos(e); ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(p.x, p.y); ctx.stroke(); lx = p.x; ly = p.y; }
+function stop(e){ e.preventDefault(); drawing = false; }
+canvas.addEventListener("mousedown", start);
+canvas.addEventListener("mousemove", move);
+canvas.addEventListener("mouseup", stop);
+canvas.addEventListener("mouseout", stop);
+canvas.addEventListener("touchstart", start, { passive: false });
+canvas.addEventListener("touchmove",  move,  { passive: false });
+canvas.addEventListener("touchend",   stop);
+canvas.addEventListener("touchcancel",stop);
+
+document.getElementById("clearSig").addEventListener("click", () => {
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  signed = false;
+});
+
+/* ============================================================
+   SIGN SUBMIT
+   ============================================================ */
+document.getElementById("submitSign").addEventListener("click", async () => {
+  const btn = document.getElementById("submitSign");
+  flushCoworkerInput_("sign");
+
+  const chosen   = pickerState.sign.selected;
+  const custName = document.getElementById("custName").value.trim();
+  const lead     = document.getElementById("techLeadSign").value.trim();
+  const extras   = coworkers.sign.slice();
+
+  if (!chosen) {
+    const modelVal = document.getElementById("modelSign").value.trim();
+    if (!modelVal) {
+      showError("Type the model / size", "Search for the equipment, or tap Add as new if it's not in the list.");
+    } else {
+      showError("Pick the equipment from the list", "Tap a result from the dropdown, or tap Add as new if it doesn't exist.");
+    }
+    return;
+  }
+  if (!custName) { showError("Customer must print their name", "Please hand the device to the customer."); return; }
+  if (!signed)   { showError("Customer must sign", "Please ask them to sign in the box."); return; }
+  if (!lead)     { showError("Enter your name", "Please type your full name."); return; }
+
+  let sigData;
+  try {
+    sigData = canvas.toDataURL("image/png");
+    if (!sigData || sigData.length < 100) throw new Error("Empty signature");
+  } catch (err) {
+    showError("Signature couldn't be read", "Please clear and sign again.");
+    return;
+  }
+
+  const payload = {
+    action: "uploadSignature",
+    equipId: chosen.id,
+    date: todayStr,
+    customerName: custName,
+    customerPhone: document.getElementById("custPhone").value.trim(),
+    customerEmail: document.getElementById("custEmail").value.trim(),
+    customerAddress: document.getElementById("custAddress").value.trim(),
+    customerNotes: document.getElementById("custNotes").value.trim(),
+    customerDate: document.getElementById("custDate").value,
+    techLead: lead,
+    coworkers: extras,
+    signature: sigData
+  };
+
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Saving…';
+  showLoading("Saving signature…", "Please wait. Do not close this page.");
+
+  try {
+    await submitViaIframe(APPS_SCRIPT_URL, payload);
+    showSuccess("All done — thank you!", "Customer signature saved.");
+    document.getElementById("custName").value = "";
+    document.getElementById("custPhone").value = "";
+    document.getElementById("custEmail").value = "";
+    document.getElementById("custAddress").value = "";
+    document.getElementById("custNotes").value = "";
+    coworkers.sign = [];
+    renderCoworkers_("sign");
+    updateFolderPreviews();
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    signed = false;
+    clearChosen_("sign");
+    document.getElementById("nameSign").value = "";
+    document.getElementById("modelSign").value = "";
+  } catch (err) {
+    console.error(err);
+    showError("Save failed", "Check your internet and try again.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "✅ Save Customer Sign-off";
+  }
+});
+
+/* ---------- helper ---------- */
+function escapeHTML_(s) {
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+</script>
+</body>
+</html>
